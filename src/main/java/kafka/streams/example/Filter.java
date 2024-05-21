@@ -6,7 +6,6 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.KStream;
 
 public class Filter {
 
@@ -20,13 +19,13 @@ public class Filter {
         properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
         // 핵심부
-        final var builder = new StreamsBuilder();
-        final KStream<String, String> streamLog = builder.stream(Config.SOURCE_TOPIC_NAME);
-        final var filterStream = streamLog.filter(
-                (key, value) -> value.length() > 5);
-        filterStream.to(Config.SINK_TOPIC_NAME);
+        final var streamsBuilder = new StreamsBuilder();
+        streamsBuilder
+                .<String, String>stream(Config.SOURCE_TOPIC_NAME)
+                .filter((key, value) -> value.length() > 5)
+                .to(Config.SINK_TOPIC_NAME);
 
-        final var streams = new KafkaStreams(builder.build(), properties);
+        final var streams = new KafkaStreams(streamsBuilder.build(), properties);
         streams.start();
     }
 }
