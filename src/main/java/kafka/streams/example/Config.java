@@ -1,4 +1,4 @@
-package kafkastreams.example.KStream;
+package kafka.streams.example;
 
 public class Config {
     public final static String BOOTSTRAP_SERVER = "54.180.139.234:9092"; // FIXME

@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Consumer" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="kafkastreams.example.KStream.Consumer" />
+    <option name="MAIN_CLASS_NAME" value="kafka.streams.example.Consumer" />
     <module name="ybigta-24th-de-kafka-streams.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="kafkastreams.example.KStream.*" />
+        <option name="PATTERN" value="kafka.streams.example.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
