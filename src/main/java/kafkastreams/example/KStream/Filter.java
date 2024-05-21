@@ -10,24 +10,21 @@ import org.apache.kafka.streams.kstream.KStream;
 
 public class Filter {
 
-    private final static String BOOTSTRAP_SERVERS = "13.209.89.173:9092";  /* change ip */
     private final static String APPLICATION_NAME = "word-filter-application";
-    private final static String STREAM_SOURCE = "stream_filter";
-    private final static String STREAM_SINK = "stream_filter_sink";
 
     public static void main(final String[] args) {
         final Properties properties = new Properties();
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, APPLICATION_NAME);
-        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Config.BOOTSTRAP_SERVER);
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
         // 핵심부
         final StreamsBuilder builder = new StreamsBuilder();
-        final KStream<String, String> streamLog = builder.stream(STREAM_SOURCE);
+        final KStream<String, String> streamLog = builder.stream(Config.SOURCE_TOPIC_NAME);
         final KStream<String, String> filterStream = streamLog.filter(
                 (key, value) -> value.length() > 5);
-        filterStream.to(STREAM_SINK);
+        filterStream.to(Config.SINK_TOPIC_NAME);
 
         final KafkaStreams streams = new KafkaStreams(builder.build(), properties);
         streams.start();

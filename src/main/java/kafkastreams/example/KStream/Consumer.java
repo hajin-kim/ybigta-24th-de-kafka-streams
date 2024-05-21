@@ -15,9 +15,7 @@ import org.slf4j.LoggerFactory;
 public class Consumer {
 
     private final static Logger log = LoggerFactory.getLogger(Consumer.class);
-    private final static String BOOTSTRAP_SERVERS = "13.209.89.173:9092";  /* change ip */
     private final static String GROUP_ID = "kstream-application";  /* this can be anything you want */
-    private final static String TOPIC_NAME = "stream_filter_sink";
 
     public Consumer() {
     }
@@ -37,7 +35,7 @@ public class Consumer {
             consumer.close();
             log.info("done!");
         }));
-        consumer.subscribe(List.of(TOPIC_NAME));
+        consumer.subscribe(List.of(Config.SINK_TOPIC_NAME));
 
         log.info("Consumer is ready");
         while (true) {
@@ -52,7 +50,7 @@ public class Consumer {
 
     public KafkaConsumer<String, String> createKafkaConsumer() {
         final Properties properties = new Properties();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.BOOTSTRAP_SERVER);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);

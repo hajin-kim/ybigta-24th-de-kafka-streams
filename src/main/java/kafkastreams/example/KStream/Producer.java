@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 public class Producer {
 
     private final static Logger log = LoggerFactory.getLogger(Consumer.class);
-    private final static String BOOTSTRAP_SERVERS = "13.209.89.173:9092";  /* change ip */
-    private final static String TOPIC_NAME = "stream_filter";
     static BufferedReader br;
     static StringTokenizer str;
 
@@ -30,7 +28,7 @@ public class Producer {
 
     public void run() throws IOException {
         log.info("Starting Kafka producer...");
-        final KafkaProducer<String, String> producer = createKafkaProducer();
+        final var producer = createKafkaProducer();
 
         // safe close
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -42,7 +40,7 @@ public class Producer {
 
         log.info("Producer is ready");
         br = new BufferedReader(new InputStreamReader(System.in));
-        final boolean keyExist = false;
+        final var keyExist = false;
 
         while (true) {
             final String key;
@@ -55,7 +53,7 @@ public class Producer {
                 key = null;
                 value = br.readLine();
             }
-            final ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC_NAME, key, value);
+            final var record = new ProducerRecord<>(Config.SOURCE_TOPIC_NAME, key, value);
 
             if (value != null) {
                 producer.send(record, (metadata, e) -> {
@@ -68,9 +66,9 @@ public class Producer {
     }
 
     public KafkaProducer<String, String> createKafkaProducer() {
-        System.out.println("BOOTSTRAP_SERVERS = " + BOOTSTRAP_SERVERS);
+        System.out.println("BOOTSTRAP_SERVERS = " + Config.BOOTSTRAP_SERVER);
         final Properties properties = new Properties();
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.BOOTSTRAP_SERVER);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
