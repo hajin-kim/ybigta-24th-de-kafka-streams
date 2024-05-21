@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
@@ -26,7 +24,7 @@ public class Consumer {
 
     public void run() {
         log.info("Starting Kafka consumer...");
-        final KafkaConsumer<String, String> consumer = createKafkaConsumer();
+        final var consumer = createKafkaConsumer();
 
         // safe close
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -39,17 +37,17 @@ public class Consumer {
 
         log.info("Consumer is ready");
         while (true) {
-            final ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+            final var records = consumer.poll(Duration.ofMillis(100));
 
-            for (final ConsumerRecord<String, String> record : records) {
-                log.info("Key: " + record.key() + ", Value: " + record.value());
-                log.info("Partition " + record.partition() + ", Offset: " + record.offset());
+            for (final var record : records) {
+                log.info("Key: {}, Value: {}", record.key(), record.value());
+                log.info("Partition {}, Offset: {}", record.partition(), record.offset());
             }
         }
     }
 
     public KafkaConsumer<String, String> createKafkaConsumer() {
-        final Properties properties = new Properties();
+        final var properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.BOOTSTRAP_SERVER);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());

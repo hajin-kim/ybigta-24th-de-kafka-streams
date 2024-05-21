@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -17,7 +16,6 @@ public class Producer {
 
     private final static Logger log = LoggerFactory.getLogger(Consumer.class);
     static BufferedReader br;
-    static StringTokenizer str;
 
     public Producer() {
     }
@@ -40,19 +38,10 @@ public class Producer {
 
         log.info("Producer is ready");
         br = new BufferedReader(new InputStreamReader(System.in));
-        final var keyExist = false;
 
         while (true) {
-            final String key;
-            final String value;
-            if (keyExist) {
-                str = new StringTokenizer(br.readLine());
-                key = str.nextToken();
-                value = str.nextToken();
-            } else {
-                key = null;
-                value = br.readLine();
-            }
+            final String key = null;
+            final var value = br.readLine();
             final var record = new ProducerRecord<>(Config.SOURCE_TOPIC_NAME, key, value);
 
             if (value != null) {
@@ -67,7 +56,7 @@ public class Producer {
 
     public KafkaProducer<String, String> createKafkaProducer() {
         System.out.println("BOOTSTRAP_SERVERS = " + Config.BOOTSTRAP_SERVER);
-        final Properties properties = new Properties();
+        final var properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.BOOTSTRAP_SERVER);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
